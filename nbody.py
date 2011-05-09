@@ -20,14 +20,15 @@ class System:
     def __init__(self,bodies=[],n=0,name=''):
         self.name = name
         if bodies == []:
-            self.bodies = createRandomBodies(n)
+            self.createRandomBodies(n)
         else:
             self.bodies = bodies
     def createRandomBodies(self,n):
+        self.bodies = []
         for i in range(0,n):
-            self.bodies << createRandomBody()
+            self.bodies.append(self.createRandomBody())
     def createRandomBody(self): # Not yet random
-        k = Body( 0,0,0, \
+        return Body( 0,0,0, \
                   0,0,0, \
                   1 , 'random')
     def size(self):
@@ -54,7 +55,11 @@ class Test:
         b = Body(name='jill',x=-1,vy = 1,mass=2)
         sys = System(bodies=[a, b],name='world')
         print sys
+    def test4(self):
+        a = System(n=2,name='world')
+        print a
+        
 
 
 a = Test()
-a.test3()
+a.test4()
