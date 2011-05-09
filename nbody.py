@@ -6,11 +6,13 @@ from numpy import * # http://numpy.scipy.org/ v1.5.1
 class Body:
     def __init__(self, x=0,y=0,z=0,vx=0,vy=0,vz=0,mass=1,name=''):
         self.name = name
-        self.pos = array([x,y,z]) # Position
-        self.vel = array([vx,vy,vz]) # Velocity
-        self.mass = mass # Mass
+        self.pos = array([x,y,z],double) # Position, type double
+        self.vel = array([vx,vy,vz],double) # Velocity
+        self.mass = double(mass) # Mass
     def __str__(self):
-        return '%s \t| Pos: (%d,%d,%d)\tVel: <%d,%d,%d>\tMass: %d' \
+        return '%s \t| Pos: (%.1f,%.1f,%.1f)\t'\
+               'Vel: <%.1f,%.1f,%.1f>\t'\
+               'Mass: %.1f' \
                % (self.name, \
                  self.pos[0],self.pos[1],self.pos[2], \
                  self.vel[0],self.vel[1],self.vel[2], \
@@ -23,6 +25,8 @@ class System:
             self.createRandomBodies(n)
         else:
             self.bodies = bodies
+
+    # Random System Creation
     def createRandomBodies(self,n):
         self.bodies = []
         for i in range(0,n):
@@ -31,10 +35,23 @@ class System:
         return Body( 0,0,0, \
                   0,0,0, \
                   1 , 'random')
+
+    # Step Function
+    def step(self,dt):
+        # Update velocities
+        
+        
+        # Update positions
+        for body in self.bodies:
+            body.pos += body.vel*dt
+        
+            
+
+    # Helper functions
     def size(self):
         return len(self.bodies)
     def __str__(self):
-        str = "%s \t| Number of Bodies: %d\n" % (self.name,self.size())
+        str = "%s \t| Number of Bodies: %.1f\n" % (self.name,self.size())
         for body in self.bodies:
             str += body.__str__() + "\n"
         return str
@@ -58,8 +75,15 @@ class Test:
     def test4(self):
         a = System(n=2,name='world')
         print a
+    def test5(self):
+        a = Body(name='bob',y=2, vx = -2,mass=3)
+        b = Body(name='jill',x=-1,vy = 1,mass=2)
+        sys = System(bodies=[a, b],name='world')
+        print sys
+        sys.step(0.5)
+        print sys
         
 
 
 a = Test()
-a.test4()
+a.test5()
