@@ -1,17 +1,19 @@
 #!/usr/bin/python
 # Filename: nbody.py
 
+from numpy import * # http://numpy.scipy.org/ v1.5.1
+
 class Body:
     def __init__(self, x=0,y=0,z=0,vx=0,vy=0,vz=0,mass=1,name=''):
         self.name = name
-        self.x,self.y,self.z = x,y,z # Position
-        self.vx,self.vy,self.vz = vx,vy,vz # Velocity
+        self.pos = array([x,y,z]) # Position
+        self.vel = array([vx,vy,vz]) # Velocity
         self.mass = mass # Mass
     def __str__(self):
         return '%s \t| Pos: (%d,%d,%d)\tVel: <%d,%d,%d>\tMass: %d' \
                % (self.name, \
-                 self.x,self.y,self.z, \
-                 self.vx,self.vy,self.vz, \
+                 self.pos[0],self.pos[1],self.pos[2], \
+                 self.vel[0],self.vel[1],self.vel[2], \
                  self.mass)
 
 class System:
@@ -28,7 +30,6 @@ class System:
         k = Body( 0,0,0, \
                   0,0,0, \
                   1 , 'random')
-    def 
     def size(self):
         return len(self.bodies)
     def __str__(self):
