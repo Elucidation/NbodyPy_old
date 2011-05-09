@@ -14,13 +14,34 @@ class Body:
                  self.vx,self.vy,self.vz, \
                  self.mass)
 
+class System:
+    def __init__(self,bodies=[],n=0,name=''):
+        self.name = name
+        if bodies == []:
+            self.bodies = createRandomBodies(n)
+        else:
+            self.bodies = bodies
+    def createRandomBodies(self,n):
+        for i in range(0,n):
+            self.bodies << createRandomBody()
+    def createRandomBody(self):
+        k = Body( 0,0,0, \
+                  0,0,0, \
+                  1 , 'random')
+                  
+        
 
 
 class Test:
     def test1(self):
         a = Body(name='bob',y=2,mass=3)
         print a
+    def test2(self):
+        a = Body(name='bob',y=2,mass=3)
+        b = Body(name='jill',x=-1,mass=2)
+        print a
+        print b
 
 
 a = Test()
-a.test1()
+a.test2()
