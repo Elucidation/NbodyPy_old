@@ -39,7 +39,22 @@ class System:
     # Step Function
     def step(self,dt):
         # Update velocities
-        
+        for i in range(0,len(self.bodies)):
+            a = self.bodies[i]
+            for j in range(i+1,len(self.bodies)):
+                b = self.bodies[j]
+                d =  (a.pos-b.pos)# Distance between
+                d2 = vdot(d,d)
+                if d2>0:
+                    F = d * (a.mass * b.mass / (sqrt(d2)*d2))# G*M*m/r^2 * 1/r * d
+                else:
+                    print " Collision between [%s] and [%s]" % (a,b)
+                    F = d * 0
+                a.vel += F*dt * b.mass / (a.mass+b.mass)
+                b.vel -= F*dt * a.mass / (a.mass+b.mass)
+                
+                
+                
         
         # Update positions
         for body in self.bodies:
@@ -76,8 +91,8 @@ class Test:
         a = System(n=2,name='world')
         print a
     def test5(self):
-        a = Body(name='bob',y=2, vx = -2,mass=3)
-        b = Body(name='jill',x=-1,vy = 1,mass=2)
+        a = Body(name='bob',x = 1, vy = 1,mass=3)
+        b = Body(name='jill',x = -1, vy = -1,mass=2)
         sys = System(bodies=[a, b],name='world')
         print sys
         sys.step(0.5)
