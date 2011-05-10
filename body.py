@@ -17,7 +17,7 @@ class Body:
     def __str__(self):
         return '[%s(%.1f,%.1f,%.1f)'\
                '<%.1f,%.1f,%.1f>'\
-               'm%.1f]' \
+               'm%g]' \
                % (self.name, \
                  self.pos[0],self.pos[1],self.pos[2], \
                  self.vel[0],self.vel[1],self.vel[2], \
@@ -25,8 +25,28 @@ class Body:
     def prettyprint(self):
         return '%s \t| Pos: (%.1f,%.1f,%.1f)\t'\
                'Vel: <%.1f,%.1f,%.1f>\t'\
-               'Mass: %.1f' \
+               'Mass: %g' \
                % (self.name, \
                  self.pos[0],self.pos[1],self.pos[2], \
                  self.vel[0],self.vel[1],self.vel[2], \
                  self.mass)
+    def detailed(self):
+        return '%s %g %g %g '\
+               '%g %g %g '\
+               '%g' \
+               % (self.name, \
+                 self.pos[0],self.pos[1],self.pos[2], \
+                 self.vel[0],self.vel[1],self.vel[2], \
+                 self.mass)
+    def load(self,inpString):
+        "ex: bob 0.0777648 9.06124 0 0.117897 0.878156 0 1"
+        self.name = inpString.split()[0]
+        self.pos[0],self.pos[1],self.pos[2], \
+        self.vel[0],self.vel[1],self.vel[2], \
+        self.mass = map(double,inpString.split()[1:])
+    def short(self):
+        "Just the positions and velocities"
+        return '%.1f %.1f %.1f '\
+               ' %.1f %.1f %.1f '\
+               % (self.pos[0],self.pos[1],self.pos[2], \
+                 self.vel[0],self.vel[1],self.vel[2])

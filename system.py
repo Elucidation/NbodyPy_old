@@ -12,6 +12,17 @@ class System:
         else:
             self.bodies = bodies
 
+    def load(self,inpString):
+        "Takes input string of format from detailed() output"
+        lines = inpString.split('\n')
+        self.name = lines[0].split()[0]
+        self.time = float(lines[0].split()[1])
+        for line in lines[1:]:
+            a = Body()
+            a.load(line)
+            self.bodies.append(a)
+        
+
     # Random System Creation
     def createRandomBodies(self,n):
         self.bodies = []
@@ -47,10 +58,7 @@ class System:
         return W
 
     def getKineticEnergy(self):
-        W = 0
-        for body in self.bodies:
-            W += body.getKineticEnergy()
-        return W
+        return sum(body.getKineticEnergy() for body in self.bodies)
     
     def getPotentialEnergy(self):
         #W=-0.5*sum(G*m*m/|d|)
@@ -69,6 +77,16 @@ class System:
                 yield (self.bodies[i],self.bodies[j])
     def size(self):
         return len(self.bodies)
+    def short(self):
+        result = ''
+        for body in self.bodies:
+            result += body.short() + "\n"
+        return result
+    def detailed(self):
+        result = '%s %g\n' % (self.name, self.time)
+        for body in self.bodies:
+            result += body.detailed() + "\n"
+        return result
     def __str__(self):
         str = "%s \t| Time: %g, N: %d, KE: %g PE: %g Total Energy: %g\n" \
               % (self.name, self.time,\
