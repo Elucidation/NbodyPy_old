@@ -2,10 +2,11 @@ from numpy import * # http://numpy.scipy.org/ v1.5.1
 from body import *
 
 class System:
-    def __init__(self,bodies=[],n=0,name='',softenLength=0,startTime=0):
+    def __init__(self,bodies=[],n=0,name='',softenLength=0,startTime=0,G=6.7e-11):
         self.name = name
         self.softenLength = softenLength # distance below which the gravitational interaction is suppressed
         self.time=startTime;
+        self.G = G
         # save softenLength**2 instead
         if bodies == []:
             self.createRandomBodies(n)
@@ -45,7 +46,7 @@ class System:
             d =  (a.pos-b.pos)# Distance between, d
             d2 = vdot(d,d) # |r|^2
             # d * G*m*m/(r^2+e^2)^(3/2)
-            F = d * a.mass * b.mass / (d2+self.softenLength**2)**(1.5)
+            F = d * self.G * a.mass * b.mass / (d2+self.softenLength**2)**(1.5)
             a.vel -= F*dt * b.mass / (a.mass+b.mass)
             b.vel += F*dt * a.mass / (a.mass+b.mass)                
         
@@ -71,7 +72,7 @@ class System:
         for a,b in self.AllBodyRelationships():
             d =  (a.pos-b.pos)# Distance between, d
             d2 = vdot(d,d) # |r|^2
-            W += -0.5*a.mass * b.mass / sqrt(d2)
+            W += -0.5*self.G*a.mass * b.mass / sqrt(d2)
         return W
     
     # Helper functions
