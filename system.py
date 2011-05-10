@@ -33,8 +33,8 @@ class System:
                 else:
                     print " Collision between [%s] and [%s]" % (a,b)
                     F = d * 0
-                a.vel += F*dt * b.mass / (a.mass+b.mass)
-                b.vel -= F*dt * a.mass / (a.mass+b.mass)
+                a.vel -= F*dt * b.mass / (a.mass+b.mass)
+                b.vel += F*dt * a.mass / (a.mass+b.mass)
         
         # Update positions
         for body in self.bodies:
@@ -44,7 +44,7 @@ class System:
     def size(self):
         return len(self.bodies)
     def __str__(self):
-        str = "%s \t| Number of Bodies: %.1f\n" % (self.name,self.size())
+        str = "%s \t| Number of Bodies: %d\n" % (self.name,self.size())
         for body in self.bodies:
             str += body.__str__() + "\n"
         return str
