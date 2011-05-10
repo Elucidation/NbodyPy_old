@@ -40,9 +40,26 @@ class System:
         # Update time
         self.time += dt
 
+    def getTotalEnergy(self):
+        "Get Total Energy = Potential + Kinetic of system"
+        W = self.getPotentialEnergy() # Add total potential Energy
+        W += self.getKineticEnergy()
+        return W
 
-    def getPotential(self):
-        return 0
+    def getKineticEnergy(self):
+        W = 0
+        for body in self.bodies:
+            W += body.getKineticEnergy()
+        return W
+    
+    def getPotentialEnergy(self):
+        #W=-0.5*sum(G*m*m/|d|)
+        W = 0
+        for a,b in self.AllBodyRelationships():
+            d =  (a.pos-b.pos)# Distance between, d
+            d2 = vdot(d,d) # |r|^2
+            W += -0.5*a.mass * b.mass / sqrt(d2)
+        return W
     
     # Helper functions
     def AllBodyRelationships(self):
@@ -53,7 +70,10 @@ class System:
     def size(self):
         return len(self.bodies)
     def __str__(self):
-        str = "%s \t| Time: %g, Number of Bodies: %d\n" % (self.name, self.time,self.size())
+        str = "%s \t| Time: %g, N: %d, KE: %g PE: %g Total Energy: %g\n" \
+              % (self.name, self.time,\
+                 self.size(), self.getKineticEnergy(), \
+                 self.getPotentialEnergy(), self.getTotalEnergy())
         for body in self.bodies:
             str += body.__str__() + "\n"
         return str

@@ -11,9 +11,9 @@ class Body:
     def setVel(self,vx,vy,vz):
         self.vel = array([vx,vy,vz],double)
 
-    def getEnergy(self):
+    def getKineticEnergy(self):
         "Kinetic energy of body 0.5*m*v^2"
-        return 0.5*self.mass*(self.vel**2)
+        return 0.5*self.mass*(vdot(self.vel,self.vel))
     def __str__(self):
         return '[%s(%.1f,%.1f,%.1f)'\
                '<%.1f,%.1f,%.1f>'\
