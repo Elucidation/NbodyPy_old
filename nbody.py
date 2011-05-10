@@ -6,10 +6,15 @@ from body import *
 from system import *
 from time import *
 
+NumSteps = 5
+dt = 0.5
+errThreshold = 0.00001
+
+
 a = Body(-1,vy=1,name='bob')
 b = Body(1,vy=-1,name='jill')
 c = Body(0,1,name='kat')
-sys = System(bodies=[a, b],name='world',softenLength=0.5)
+sys = System(bodies=[a, b],name='world',softenLength=errThreshold)
 
 print "Start"
 print sys
@@ -17,11 +22,9 @@ print sys
 startTime = time()
 startEnergy = sys.getTotalEnergy()
 
-for i in range(1,1000):
-    #c = time()
-    sys.step(0.01)
-    #print "Step #%d, Step took %g seconds" % (i,time()-c)
-    #print sys
+for i in sys.stepMany(NumSteps,dt):
+    print "Step #%g, Time:<%g-%g>" % (i,sys.time-dt,sys.time)
+    print sys.short()
 
 print "End"
 print sys

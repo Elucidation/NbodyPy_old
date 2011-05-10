@@ -33,6 +33,11 @@ class System:
                   0,0,0, \
                   1 , 'random')
 
+    def stepMany(self,numSteps,dt):
+        for i in range(0,numSteps):
+            self.step(dt)
+            yield i
+            
     # Step Function
     def step(self,dt):
         # Update velocities
