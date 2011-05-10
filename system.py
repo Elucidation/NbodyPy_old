@@ -2,8 +2,11 @@ from numpy import * # http://numpy.scipy.org/ v1.5.1
 from body import *
 
 class System:
-    def __init__(self,bodies=[],n=0,name=''):
+    def __init__(self,bodies=[],n=0,name='',softenLength=0,startTime=0):
         self.name = name
+        self.softenLength = softenLength # distance below which the gravitational interaction is suppressed
+        self.time=startTime;
+        # save softenLength**2 instead
         if bodies == []:
             self.createRandomBodies(n)
         else:
@@ -22,29 +25,35 @@ class System:
     # Step Function
     def step(self,dt):
         # Update velocities
-        for i in range(0,len(self.bodies)):
-            a = self.bodies[i]
-            for j in range(i+1,len(self.bodies)):
-                b = self.bodies[j]
-                d =  (a.pos-b.pos)# Distance between
-                d2 = vdot(d,d)
-                if d2>0:
-                    F = d * (a.mass * b.mass / (sqrt(d2)*d2))# G*M*m/r^2 * 1/r * d
-                else:
-                    print " Collision between [%s] and [%s]" % (a,b)
-                    F = d * 0
-                a.vel -= F*dt * b.mass / (a.mass+b.mass)
-                b.vel += F*dt * a.mass / (a.mass+b.mass)
+        for a,b in self.AllBodyRelationships():
+            d =  (a.pos-b.pos)# Distance between, d
+            d2 = vdot(d,d) # |r|^2
+            # d * G*m*m/(r^2+e^2)^(3/2)
+            F = d * a.mass * b.mass / (d2+self.softenLength**2)**(1.5)
+            a.vel -= F*dt * b.mass / (a.mass+b.mass)
+            b.vel += F*dt * a.mass / (a.mass+b.mass)                
         
         # Update positions
         for body in self.bodies:
             body.pos += body.vel*dt
 
+        # Update time
+        self.time += dt
+
+
+    def getPotential(self):
+        return 0
+    
     # Helper functions
+    def AllBodyRelationships(self):
+        "iterator for every body relationship"
+        for i in range(0,len(self.bodies)):
+            for j in range(i+1,len(self.bodies)):
+                yield (self.bodies[i],self.bodies[j])
     def size(self):
         return len(self.bodies)
     def __str__(self):
-        str = "%s \t| Number of Bodies: %d\n" % (self.name,self.size())
+        str = "%s \t| Time: %g, Number of Bodies: %d\n" % (self.name, self.time,self.size())
         for body in self.bodies:
             str += body.__str__() + "\n"
         return str
