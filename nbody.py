@@ -7,13 +7,13 @@ from system import *
 from time import *
 from visual import * # Vpython for 2.7 needed
 
-NumSteps = 500
-dt = 0.1
+NumSteps = 1000000
+dt = 0.001
 errThreshold = 0.00001
 
 
-a = Body(-1,vy=0.25,name='bob')
-b = Body(1,vy=-0.25,name='jill')
+a = Body(-1,0,0,    0,0.25,0,   name='bob')
+b = Body(1,0,0,     0,-0.25,0,  name='jill')
 sys = System(bodies=[a, b],name='world',softenLength=errThreshold,G=1)
 
 # Visual
@@ -32,12 +32,17 @@ print sys
 startTime = time()
 startEnergy = sys.getTotalEnergy()
 
+c = time()
 for i in sys.stepMany(NumSteps,dt):
-    rate(100)
-    print "Step #%g, Time:<%g-%g>" % (i,sys.time-dt,sys.time)
-    print sys.short()
-    ballA.pos = sys.bodies[0].pos
-    ballB.pos = sys.bodies[1].pos
+    #print "Step #%g, Time:<%g-%g>" % (i,sys.time-dt,sys.time)
+    #print sys
+    
+    if (time()-c > 1.0/30): # 30Hz framerate
+        #rate(100)
+        ballA.pos = sys.bodies[0].pos
+        ballB.pos = sys.bodies[1].pos
+        c = time()
+        
         
 
 print "End"
