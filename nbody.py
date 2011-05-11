@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 # Filename: nbody.py
 
@@ -6,24 +7,37 @@ from body import *
 from system import *
 from time import *
 from visual import * # Vpython for 2.7 needed
+import random
+
+
+
+def pause():
+    while True:
+        rate(50)
+        if scene.kb.keys:
+            k = scene.kb.getkey()
+            return
 
 NumSteps = 1000000
-dt = 0.001
-errThreshold = 0.00001
+dt = 0.01
+errThreshold = 0.1
+N = 30
 
+sys = System(n=N,name='world',softenLength=errThreshold,G=1)
 
-a = Body(-1,0,0,    0,0.25,0,   name='bob')
-b = Body(1,0,0,     0,-0.25,0,  name='jill')
-sys = System(bodies=[a, b],name='world',softenLength=errThreshold,G=1)
+for body in sys.bodies:
+    body.visual = sphere(radius = 0.2, \
+                         pos=body.pos, \
+                         color=randRGB(0.2,0.8),\
+                         make_trail=False, \
+                         interval=1,\
+                         retain=250)
 
 # Visual
 L=1
 xaxis = curve(pos=[(0,0,0), (L,0,0)], color=(0.5,0.5,0.5))
 yaxis = curve(pos=[(0,0,0), (0,L,0)], color=(0.5,0.5,0.5))
 zaxis = curve(pos=[(0,0,0), (0,0,L)], color=(0.5,0.5,0.5))
-
-ballA = sphere(radius = 0.2, pos=a.pos,color=color.red,make_trail=True)
-ballB = sphere(radius = 0.2, pos=b.pos,color=color.blue,make_trail=True)
 
 
 print "Start"
@@ -36,13 +50,26 @@ c = time()
 for i in sys.stepMany(NumSteps,dt):
     #print "Step #%g, Time:<%g-%g>" % (i,sys.time-dt,sys.time)
     #print sys
+
     
-    if (time()-c > 1.0/30): # 30Hz framerate
-        #rate(100)
-        ballA.pos = sys.bodies[0].pos
-        ballB.pos = sys.bodies[1].pos
-        c = time()
+    if (time()-c > 1.0/60): # 60Hz framerate
+        rate(100)
+
+        # KEYBOARD INPUT
+        if (scene.kb.keys > 0):
+            if scene.kb.getkey()==' ':
+                pause()
+
         
+        # UPDATE VISUAL
+        for body in sys.bodies:
+            body.visual.pos = body.pos - sys.getCenter()
+        c = time()
+
+        
+
+
+
         
 
 print "End"

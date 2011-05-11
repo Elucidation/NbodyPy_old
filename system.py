@@ -1,5 +1,6 @@
 from numpy import * # http://numpy.scipy.org/ v1.5.1
 from body import *
+from randStuff import *
 
 class System:
     def __init__(self,bodies=[],n=0,name='',softenLength=0,startTime=0,G=6.7e-11):
@@ -22,18 +23,31 @@ class System:
             a = Body()
             a.load(line)
             self.bodies.append(a)
-        
+    def centerBodies(self):
+        "Move all bodies to center of mass"
+        center = self.getCenter()
+        for body in self.bodies:
+            body.pos -= center
+    def getCenter(self):
+        p=array([0,0,0],double)
+        for body in self.bodies:
+            p+= body.pos
+        p /= len(self.bodies)
+        return p
 
     # Random System Creation
     def createRandomBodies(self,n):
         self.bodies = []
         for i in range(0,n):
             self.bodies.append(self.createRandomBody())
+        self.centerBodies()
     def createRandomBody(self): # Not yet random
-        return Body( 0,0,0, \
-                  0,0,0, \
-                  1 , 'random')
-
+        a = Body()
+        a.name = randShortName()
+        a.pos = randArr3(-3,3)
+        a.vel = randArr3(-1,1)
+        return a
+        
     def stepMany(self,numSteps,dt):
         for i in range(0,numSteps):
             self.step(dt)
