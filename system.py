@@ -63,10 +63,12 @@ class System:
             
             # d * G*m*m/(r^2+e^2)^(3/2)
             if (a.mass == 0):
-            	F = d * self.G * b.mass / (d2+self.softenLengthSqrd)**(1.5) # Assume mass of a is negligable
+            	# Assume mass of a is negligable
+            	F = d * self.G * b.mass / (d2+self.softenLengthSqrd)**(1.5) 
             	a.vel -= F*dt
-            elif (b.mass = 0):
-            	F = d * self.G * a.mass / (d2+self.softenLengthSqrd)**(1.5) # Assume mass of a is negligable
+            elif (b.mass == 0):
+            	# Assume mass of a is negligable
+            	F = d * self.G * a.mass / (d2+self.softenLengthSqrd)**(1.5) 
             	b.vel += F*dt
             else:
 		         F = d * self.G * a.mass * b.mass / (d2+self.softenLengthSqrd)**(1.5)
