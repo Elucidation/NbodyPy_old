@@ -49,7 +49,8 @@ class System:
     # END Random System Creation ---------------------
     
     def stepMany(self,numSteps,dt):
-        for i in range(0,numSteps):
+    	# yields i for i = 1 to numSteps+1, after each step
+        for i in range(1,numSteps+1):
             self.step(dt)
             yield i
             
