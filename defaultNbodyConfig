@@ -10,6 +10,8 @@ numSteps = 100
 dt = 0.1
 G = 1
 errorThreshold = 0.001
+#doRand = 1
+#n = 10
 
 # World Info
 WORLD

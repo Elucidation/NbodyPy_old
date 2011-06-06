@@ -20,6 +20,9 @@ sys = System(bodies=options['bodies'],\
 				 startTime=options['initTime'],\
 				 G=options['G'])
 
+if options['doRand'] == 1:	
+	sys.createRandomBodies(options['n'])
+
 SimulationName = options['simName']
 NumSteps = options['NumSteps']
 dt = options['dt']

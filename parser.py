@@ -12,7 +12,8 @@ def parseNbodySystem(filename):
 		  'errThreshold':0,\
 		  'G':0,\
 		  'NumSteps':0,\
-		  'dt':0}
+		  'dt':0,\
+		  'doRand':0}
 	
 	print "------LOADING NBODY SYSTEM FROM FILE------"
 	print "Loading Nbody Configuration from file '%s'..." % filename
@@ -70,6 +71,11 @@ def parseNbodySystem(filename):
 		 	elif type == 'errorThreshold':
 		 		p['errThreshold'] = double(value)
 		 		print "Error threshold set to %g" % p['errThreshold']
+		 	elif type == 'doRand':
+		 		p['doRand'] = 1
+		 		print "Creating random bodies"
+		 	elif type == 'n':
+		 		p['n'] = int(value)
 		 elif mode == 'world':
 		 	# Do world reading stuff
 		 	# Possible values:
