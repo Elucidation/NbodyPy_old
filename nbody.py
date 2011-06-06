@@ -44,12 +44,20 @@ startEnergy = sys.getTotalEnergy()
 startTime = time()
 
 outfile = open(options['outputfile'],'w')
-outfile.write(str(sys)+'\n')
+#outfile.write(str(sys)+'\n')
 outfile.write('SIMULATION START\n')
+outfile.write('%i\n' % sys.size())
+c = time()
+debugTimeStep = 5 # seconds
+outputStepMult = 10 # 1 = use every step, 2 = every other, 3 = every third...
 for i in sys.stepMany(NumSteps,dt):
-    #print "Step #%g" % i
-    #print sys
-    outfile.write(sys.data()+'\n')
+	 if (time()-c > debugTimeStep):
+		 print "Step #%g/%g" % (i,NumSteps)
+		 c = time()
+		 #print sys	 
+	 if (mod(i,outputStepMult)==0):
+	 	outfile.write(sys.data()+'\n')
+    
 outfile.write('SIMULATION END\n')
 outfile.close()
 

@@ -6,12 +6,12 @@ SIMULATION
 name  = default
 outputfilename = defaultOut
 seed = 1 
-numSteps = 100
-dt = 0.1
+numSteps = 10000
+dt = 0.001
 G = 1
 errorThreshold = 0.001
 #doRand = 1
-#n = 10
+#n = 5
 
 # World Info
 WORLD
@@ -22,6 +22,8 @@ initTime = 0
 # Bodies Info, new line for each body
 BODIES
 # Name px py pz vx vy vz mass
-bob -1 0 0 0 0.5 0 0
-jill 1 0 0 0 0 0 2
+# Example 2 body
+bob -1 0 0 0 0.5 0 1
+jill 1 0 0 0 -0.25 0 2
+
 

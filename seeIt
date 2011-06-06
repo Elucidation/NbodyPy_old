@@ -1,0 +1,15 @@
+#!/bin/bash
+#N=$(head -2 defaultOut | tail -1)
+tail -n +1 defaultOut > sanOut
+
+#echo 'set multiplot' > temp.gnu
+#for i in $(eval echo "{1..$N}")
+#do
+#	echo "splot 'sanOut' every $N::$i using 1:2:3 with points" >> temp.gnu
+#done
+#echo 'set nomultiplot' >> temp.gnu
+
+echo "splot 'sanOut' using 1:2:3 with points" > temp.gnu
+
+
+gnuplot -persist < temp.gnu 
