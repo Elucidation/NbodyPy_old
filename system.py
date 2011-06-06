@@ -111,6 +111,9 @@ class System:
     def size(self):
     	"Number of bodies in system"
         return len(self.bodies)
+    def data(self):
+    	"returns current stats of system as needed for visualization only (pos/vel)"
+    	return "\n".join(body.data() for body in self.bodies)
     def short(self):
         return "\n".join(body.short() for body in self.bodies)
     def detailed(self):

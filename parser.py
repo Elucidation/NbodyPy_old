@@ -5,14 +5,14 @@ from system import *
 
 def parseNbodySystem(filename):
 	
-	# Initial conditions
-	simName = 'none'
-	bodies = []
-	sysName = 'none'
-	errThreshold = 0
-	G = 0
-	NumSteps = 0
-	dt = 0
+	p = {'simName':'none',\
+		  'outputfile':'none',\
+		  'bodies':[],\
+		  'sysName':'none',\
+		  'errThreshold':0,\
+		  'G':0,\
+		  'NumSteps':0,\
+		  'dt':0}
 	
 	print "------LOADING NBODY SYSTEM FROM FILE------"
 	print "Loading Nbody Configuration from file '%s'..." % filename
@@ -50,42 +50,44 @@ def parseNbodySystem(filename):
 		 	# name seed numSteps dt G errorThreshold
 		 	type,value = line.replace(' ','').split('=')
 		 	if type == 'name':
-		 		simName = value
-		 		print "Simulation name set to %s" % simName
+		 		p['simName'] = value
+		 		print "Simulation name set to %s" % p['simName']
+		 	if type == 'outputfilename':
+		 		p['outputfile'] = value
+		 		print "Output filename set to %s" % p['outputfile']
 		 	elif type == 'seed':
-		 		seed = int(value)
-		 		print "Seed set to %i" % seed
+		 		p['seed'] = int(value)
+		 		print "Seed set to %i" % p['seed']
 		 	elif type == 'numSteps':
-		 		NumSteps = int(value)
-		 		print "Number of steps to calculate set to %i" % NumSteps
+		 		p['NumSteps'] = int(value)
+		 		print "Number of steps to calculate set to %i" % p['NumSteps']
 		 	elif type == 'dt':
-		 		dt = double(value)
-		 		print "Time step set to %g" % dt
+		 		p['dt'] = double(value)
+		 		print "Time step set to %g" % p['dt']
 		 	elif type == 'G':
-		 		G = double(value)
-		 		print "Gravitation constant G set to %g" % G
+		 		p['G'] = double(value)
+		 		print "Gravitation constant G set to %g" % p['G']
 		 	elif type == 'errorThreshold':
-		 		errThreshold = double(value)
-		 		print "Error threshold set to %g" % errThreshold
+		 		p['errThreshold'] = double(value)
+		 		print "Error threshold set to %g" % p['errThreshold']
 		 elif mode == 'world':
 		 	# Do world reading stuff
 		 	# Possible values:
 		 	# name initTime
 		 	type,value = line.replace(' ','').split('=')
 		 	if type == 'name':
-		 		sysName = value
-		 		print "System Name set to %s" % sysName
+		 		p['sysName'] = value
+		 		print "System Name set to %s" % p['sysName']
 		 	elif type == 'initTime':
-		 		initTime = double(value)
-		 		print "System Starting Time set to %g" % initTime
+		 		p['initTime'] = double(value)
+		 		print "System Starting Time set to %g" % p['initTime']
 		 elif mode == 'body':
 		 	# Load Body
 		 	a = Body();
 		 	a.load(line)
-		 	bodies.append(a)
+		 	p['bodies'].append(a)
 		 	print "Loaded Body " + str(a)
 	
 	print "------FINISHED READING FROM FILE------"
 	file.close()
-	sys = System(bodies,name=sysName,softenLength=errThreshold,startTime=initTime, G=G)
-	return simName, NumSteps, dt, sys
+	return p

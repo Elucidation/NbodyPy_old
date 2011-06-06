@@ -13,9 +13,21 @@ configFile = "defaultNbodyConfig" # Should be located in same directory
 
 
 tic = time()
-SimulationName, NumSteps, dt, sys = parseNbodySystem(configFile)
+options = parseNbodySystem(configFile)
+sys = System(bodies=options['bodies'],\
+				 name=options['sysName'],\
+				 softenLength=options['errThreshold'],\
+				 startTime=options['initTime'],\
+				 G=options['G'])
+
+SimulationName = options['simName']
+NumSteps = options['NumSteps']
+dt = options['dt']
+
 print " Time to read file: %g seconds" % (time()-tic)
-print "Simulation '%s': Number of Steps: %i, dt: %g, G: %g, errThresh: %g" %(SimulationName, NumSteps,dt, sys.G, sqrt(sys.softenLengthSqrd))
+print " Output file: %s " % options['outputfile']
+print "Simulation '%s': Number of Steps: %i, dt: %g, G: %g, errThresh: %g" \
+	% (SimulationName, NumSteps,dt, sys.G, sqrt(sys.softenLengthSqrd))
 print sys
 print "------SYSTEM CREATED------"
 
@@ -27,9 +39,17 @@ print sys
 startEnergy = sys.getTotalEnergy()
 
 startTime = time()
+
+outfile = open(options['outputfile'],'w')
+outfile.write(str(sys)+'\n')
+outfile.write('SIMULATION START\n')
 for i in sys.stepMany(NumSteps,dt):
-    print "Step #%g" % i
-    print sys        
+    #print "Step #%g" % i
+    #print sys
+    outfile.write(sys.data()+'\n')
+outfile.write('SIMULATION END\n')
+outfile.close()
+
 endTime = time()-startTime
 print "End\n"
 print "Simulation '%s': Number of Steps: %i, dt: %g, G: %g, errThresh: %g" %(SimulationName, NumSteps,dt, sys.G, sqrt(sys.softenLengthSqrd))

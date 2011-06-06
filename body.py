@@ -38,6 +38,11 @@ class Body:
                  self.pos[0],self.pos[1],self.pos[2], \
                  self.vel[0],self.vel[1],self.vel[2], \
                  self.mass)
+    def data(self):
+    	" Only returns position and velocity"
+        return '%g %g %g %g %g %g'\
+               % (self.pos[0],self.pos[1],self.pos[2], \
+                 self.vel[0],self.vel[1],self.vel[2])
     def load(self,inpString):
         "ex: bob 0.0777648 9.06124 0 0.117897 0.878156 0 1"
         self.name = inpString.split()[0]
